@@ -34,28 +34,28 @@ s5ClientUdpProxy::s5ClientUdpProxy(char *szProxyIP, WORD &wProxyPort)
 
 void s5ClientUdpProxy::sendUdpPackage()
 {
-	for (int i = 0; i < 2; i++)
-	{
-		char pMsg[MAX_PATH];
-		sprintf_s(pMsg, "%d\t%s", i, "test\r\n");
+	
+	char pMsg[MAX_PATH];
+	sprintf_s(pMsg, "%d\t%s", 1, "test132\r\n");
 
-		int n = strlen(pMsg);
+	int n = strlen(pMsg);
 
-		int  nSendLen = 10 + strlen(pMsg) + 1;
-		char *p = new char[nSendLen];
+	int  nSendLen = 10 + strlen(pMsg) + 1;
+	char *p = new char[nSendLen];
 
-		memcpy(p, (char*)&udpHdr, 10);
-		memcpy(p + 10, pMsg, strlen(pMsg) + 1);
-		int addrlen = sizeof(ProxyServerAddr);
-		int nRet = sendto(udpSocket, p, nSendLen, 0, (SOCKADDR*)&ProxyServerAddr, sizeof(SOCKADDR));
-		memset(p, 0, nSendLen);
-		//int rRet = recvfrom(udpSocket, p, nSendLen, 0, (SOCKADDR*)&ProxyServerAddr, &addrlen);
+	memcpy(p, (char*)&udpHdr, 10);
 
-		//GetDlgItem(IDC_EDIT4)->SetWindowText(CString(p));
-		delete[]p;
+	memcpy(p + 10, pMsg, strlen(pMsg) + 1);
+	int addrlen = sizeof(ProxyServerAddr);
+	int nRet = sendto(udpSocket, p, nSendLen, 0, (SOCKADDR*)&ProxyServerAddr, sizeof(SOCKADDR));
+	memset(p, 0, nSendLen);
 
-		Sleep(1000);
-	}
+	int rRet = recvfrom(udpSocket, p, nSendLen, 0, (SOCKADDR*)&ProxyServerAddr, &addrlen);
+	
+	std::cout << p + 10 << std::endl;
+
+	delete[]p;
+	
 	closesocket(udpSocket);
 }
 
